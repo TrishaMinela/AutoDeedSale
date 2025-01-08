@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  // State to store form data
+  // [Variable, function to update the state] = initial state
   const [buyerName, setBuyerName] = useState('');
   const [buyerAddress, setBuyerAddress] = useState('');
   const [buyerCivilStatus, setBuyerCivilStatus] = useState('');
@@ -24,8 +24,8 @@ function App() {
   const [witness1Name, setWitness1Name] = useState('');
   const [witness2Name, setWitness2Name] = useState('');
 
-  const [buyerSignature, setBuyerSignature] = useState(null);
-  const [sellerSignature, setSellerSignature] = useState(null);
+  // const [buyerSignature, setBuyerSignature] = useState(null);
+  // const [sellerSignature, setSellerSignature] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,8 +47,8 @@ function App() {
       fileNo,
       witness1Name,
       witness2Name,
-      buyerSignature,
-      sellerSignature,
+      // buyerSignature,
+      // sellerSignature,
     };
     generatePDF(data);
   };
@@ -81,8 +81,8 @@ function App() {
     doc.text(`Witness 2: ${data.witness2Name}`, 10, 190);
 
     // For signatures, we will mention the file names since PDFs can't directly store images in this simple format
-    doc.text(`Buyer Signature: ${data.buyerSignature ? 'Uploaded' : 'Not Provided'}`, 10, 200);
-    doc.text(`Seller Signature: ${data.sellerSignature ? 'Uploaded' : 'Not Provided'}`, 10, 210);
+    // doc.text(`Buyer Signature: ${data.buyerSignature ? 'Uploaded' : 'Not Provided'}`, 10, 200);
+    // doc.text(`Seller Signature: ${data.sellerSignature ? 'Uploaded' : 'Not Provided'}`, 10, 210);
 
     doc.save('deed_of_sale.pdf');
   };
