@@ -24,11 +24,22 @@ function App() {
   const [witness1Name, setWitness1Name] = useState('');
   const [witness2Name, setWitness2Name] = useState('');
 
+  const [buyerEmail] = useState('');
+  const [recipientEmail] = useState('');
+
   // const [buyerSignature, setBuyerSignature] = useState(null);
   // const [sellerSignature, setSellerSignature] = useState(null);
 
+  //Google Auth
+  const handleLogin = () => {
+    window.location.href = 'http://localhost:5000/auth/google';
+  };
+
+  //Function to submit (react passes the event object automatically)
   const handleSubmit = (e) => {
+    // Prevent the default form reload upon submission
     e.preventDefault();
+    //Object holding all the values from the form
     const data = {
       buyerName,
       buyerAddress,
@@ -50,11 +61,16 @@ function App() {
       // buyerSignature,
       // sellerSignature,
     };
+    //Calls the function to generate the PDF with the data passed
     generatePDF(data);
   };
 
+  
+
   const generatePDF = (data) => {
+    //Importing the jsPDF library so we can create PDFs in JS
     const { jsPDF } = require('jspdf');
+    //Create a new document
     const doc = new jsPDF();
 
     doc.text('Deed of Sale', 10, 10);
@@ -84,8 +100,79 @@ function App() {
     // doc.text(`Buyer Signature: ${data.buyerSignature ? 'Uploaded' : 'Not Provided'}`, 10, 200);
     // doc.text(`Seller Signature: ${data.sellerSignature ? 'Uploaded' : 'Not Provided'}`, 10, 210);
 
+    // Save the PDF
     doc.save('deed_of_sale.pdf');
   };
+  
+  
+  const sendEmail = (data) => {
+    if (!buyerEmail) {
+        alert('Please provide your email to send the document.');
+        return;
+    }
+
+    // Ask for the recipient email
+    const recipientEmail = prompt("Please enter the recipient's email:");
+
+    if (!recipientEmail) {
+        alert('Recipient email is required.');
+        return;
+    }
+
+    fetch('http://localhost:5000/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            senderEmail: buyerEmail, // User's email from login
+            recipientEmail: recipientEmail, // Recipient's email entered
+            formData: data,
+        }),
+    })
+    .then((response) => response.json())
+    .then(() => {
+        alert('Email sent successfully!');
+    })
+    .catch((error) => {
+        alert('Error sending email: ' + error.message);
+    });
+};
+
+// In the handleSubmit method, change the action to call the `sendEmail` method
+const handleActionChange = () => {
+  // Check if the user is logged in (authenticated via Google)
+  const user = sessionStorage.getItem("user"); // Check if user is stored in session (after Google login)
+
+  if (!user) {
+      // If the user isn't logged in, trigger Google login
+      handleLogin();
+  } else {
+      // If the user is logged in, proceed with asking for the recipient email
+      sendEmail({
+          buyerName,
+          buyerAddress,
+          buyerCivilStatus,
+          sellerName,
+          sellerAddress,
+          salePrice,
+          dateOfSale,
+          makeSeries,
+          model,
+          motorNo,
+          crNo,
+          type,
+          plateNo,
+          chassisNo,
+          fileNo,
+          witness1Name,
+          witness2Name,
+          buyerEmail,
+          recipientEmail,
+      });
+  }
+};
+
+
+
 
   return (
     <div className="App">
@@ -172,7 +259,13 @@ function App() {
         </label><br /> */}
 
 <br/>
+        
+        <div>
         <button type="submit">Generate Deed of Sale PDF</button>
+        <br/>
+        <button type="button" onClick={() => handleActionChange('send')}>Send via Email</button>
+        </div>
+        
       </form>
     </div>
   );
