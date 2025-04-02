@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import './App.css';
+import React from 'react';
+import { useState, useEffect } from 'react';
 
-function App() {
+function DeedofSale() {
   // [Variable, function to update the state] = initial state
   const [buyerName, setBuyerName] = useState('');
   const [buyerAddress, setBuyerAddress] = useState('');
@@ -25,10 +25,26 @@ function App() {
   const [witness2Name, setWitness2Name] = useState('');
 
   const [buyerEmail] = useState('');
-  const [recipientEmail] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
+  const [recipientEmail, setRecipientEmail] = useState('');
 
   // const [buyerSignature, setBuyerSignature] = useState(null);
   // const [sellerSignature, setSellerSignature] = useState(null);
+
+  useEffect(() => {
+    // Check if the user is authenticated (you can store in localStorage or sessionStorage)
+    if (localStorage.getItem('authToken')) {
+      setAuthenticated(true);
+    }
+  }, []);
+
+  const handleEmailSubmit = (e) => {
+    e.preventDefault();
+    sendEmail({
+      buyerEmail,
+      recipientEmail,
+    });
+  };
 
   //Google Auth
   const handleLogin = () => {
@@ -267,8 +283,32 @@ const handleActionChange = () => {
         </div>
         
       </form>
-    </div>
+
+      {/* Conditional rendering of the email form */}
+    {authenticated && (
+      <form onSubmit={handleEmailSubmit}>
+        <label>
+          Recipient Email:
+          <input
+            type="email"
+            value={recipientEmail}
+            onChange={(e) => setRecipientEmail(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Send Email</button>
+      </form>
+    )}
+  </div>
+
+    
+
+    
   );
 }
 
-export default App;
+
+
+
+
+export default DeedofSale;

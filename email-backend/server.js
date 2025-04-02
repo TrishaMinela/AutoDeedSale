@@ -56,20 +56,26 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.get('/auth/google',
-  passport.authenticate('google', {
+app.get('/auth/google', (req, res, next) => {
+  console.log('Google authentication requested');
+  if (req.isAuthenticated()) {
+    return res.redirect('http://localhost:3000');
+  }
+  // Proceed to the Google authentication
+  passport.authenticate('google', { 
     scope: ['profile', 'email', 'https://www.googleapis.com/auth/gmail.send'],
     accessType: 'offline',
-    prompt: 'consent',
-    successRedirect: 'http://localhost:3000', 
-    failureRedirect: '/login', 
-  })
-);
+    prompt: 'consent'
+  })(req, res, next); // This line was missing
+});
+
+
 
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
     // Store the user session after successful login
     req.session.user = req.user;
-    res.redirect('/');
+    // Redirect to the React frontend (assuming it's running on localhost:3000)
+    res.redirect('http://localhost:3000');
   });
 
 // PDF and Email Sending Route
@@ -137,8 +143,8 @@ app.post('/send-email', async (req, res) => {
   
   
   // Serve Frontend
-  app.use(express.static(path.join(__dirname, 'client/build')));
-  app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'client/build', 'index.html')));
+  app.use(express.static(path.join(__dirname, 'build')));
+  app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'build', 'index.html')));
   
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
