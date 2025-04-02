@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import './dos.css'; 
 
 function DeedofSale() {
   // [Variable, function to update the state] = initial state
@@ -244,87 +245,88 @@ const handleActionChange = () => {
 
 
    return (
-    <div className="App">
+    <div className="dos-container">
+        <h2>Fill in this</h2>
+        <h1>DEED OF SALE</h1>
+
       <form onSubmit={handleSubmit}>
         {/* Buyer Details */}
         <h3>Buyer Details</h3>
-        <input
-          type="text"
-          value={buyerName}
-          onChange={(e) => setBuyerName(e.target.value)}
-          placeholder="Enter Buyer Name"
-        /><br />
-        <input
-          type="text"
-          value={buyerAddress}
-          onChange={(e) => setBuyerAddress(e.target.value)}
-          placeholder="Enter Buyer Address"
-        /><br />
-        <input
-          type="text"
-          value={buyerCivilStatus}
-          onChange={(e) => setBuyerCivilStatus(e.target.value)}
-          placeholder="Enter Buyer Civil Status"
-        /><br />
+        <div className="buyer-details">
+            <input
+              type="text"
+              value={buyerName}
+              onChange={(e) => setBuyerName(e.target.value)}
+              placeholder="Enter Buyer Name"
+            /><br />
+            <input
+              type="text"
+              value={buyerAddress}
+              onChange={(e) => setBuyerAddress(e.target.value)}
+              placeholder="Enter Buyer Address"
+            /><br />
+            <input
+              type="text"
+              value={buyerCivilStatus}
+              onChange={(e) => setBuyerCivilStatus(e.target.value)}
+              placeholder="Enter Buyer Civil Status"
+            /><br />
+        </div>
 
-        <input
-          type="number"
-          value={salePrice}
-          onChange={(e) => setSalePrice(e.target.value)}
-          step="0.01"
-          min="0"
-          placeholder="Enter Sale Price in ₱"
-        /><br />
+        
 
         {/* Vehicle Info */}
-        <input
-          type="text"
-          value={makeSeries}
-          onChange={(e) => setMakeSeries(e.target.value)}
-          placeholder="Enter Make/Series"
-        /><br />
-        <input
-          type="text"
-          value={model}
-          onChange={(e) => setModel(e.target.value)}
-          placeholder="Enter Model"
-        /><br />
-        <input
-          type="text"
-          value={motorNo}
-          onChange={(e) => setMotorNo(e.target.value)}
-          placeholder="Enter Motor No"
-        /><br />
-        <input
-          type="text"
-          value={crNo}
-          onChange={(e) => setCrNo(e.target.value)}
-          placeholder="Enter C.R. No"
-        /><br />
-        <input
-          type="text"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          placeholder="Enter Type"
-        /><br />
-        <input
-          type="text"
-          value={plateNo}
-          onChange={(e) => setPlateNo(e.target.value)}
-          placeholder="Enter Plate No"
-        /><br />
-        <input
-          type="text"
-          value={chassisNo}
-          onChange={(e) => setChassisNo(e.target.value)}
-          placeholder="Enter Chassis No"
-        /><br />
-        <input
-          type="text"
-          value={fileNo}
-          onChange={(e) => setFileNo(e.target.value)}
-          placeholder="Enter File No"
-        /><br />
+        <div className="vehicle-details">
+            <input
+              type="text"
+              value={makeSeries}
+              onChange={(e) => setMakeSeries(e.target.value)}
+              placeholder="Enter Make/Series"
+            /><br />
+            <input
+              type="text"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              placeholder="Enter Model"
+            /><br />
+            <input
+              type="text"
+              value={motorNo}
+              onChange={(e) => setMotorNo(e.target.value)}
+              placeholder="Enter Motor No"
+            /><br />
+            <input
+              type="text"
+              value={crNo}
+              onChange={(e) => setCrNo(e.target.value)}
+              placeholder="Enter C.R. No"
+            /><br />
+            <input
+              type="text"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              placeholder="Enter Type"
+            /><br />
+            <input
+              type="text"
+              value={plateNo}
+              onChange={(e) => setPlateNo(e.target.value)}
+              placeholder="Enter Plate No"
+            /><br />
+            <input
+              type="text"
+              value={chassisNo}
+              onChange={(e) => setChassisNo(e.target.value)}
+              placeholder="Enter Chassis No"
+            /><br />
+            <input
+              type="text"
+              value={fileNo}
+              onChange={(e) => setFileNo(e.target.value)}
+              placeholder="Enter File No"
+            /><br />
+        </div>
+
 
         {/* Witness Details
         <h3>Witnesses</h3>
@@ -341,12 +343,22 @@ const handleActionChange = () => {
           placeholder="Enter Witness 2 Name"
         /><br /> */}
 
-        <h3>Sale Date</h3>
-        <input
-          type="date"
-          value={dateOfSale}
-          onChange={(e) => setDateOfSale(e.target.value)}
-        /><br />
+        <div className = "sale-details">
+            <input
+            type="number"
+            value={salePrice}
+            onChange={(e) => setSalePrice(e.target.value)}
+            step="0.01"
+            min="0"
+            placeholder="Enter Sale Price in ₱"
+          /><br />
+          <input
+            type="date"
+            value={dateOfSale}
+            onChange={(e) => setDateOfSale(e.target.value)}
+          /><br />
+        </div>
+        
 
         {/* Submit Buttons */}
         <button type="submit">Generate PDF</button>

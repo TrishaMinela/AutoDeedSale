@@ -1,0 +1,44 @@
+.dos-container h1, .dos-container h2 {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.buyer-details, .sale-details, .vehicle-details {
+  display: flex;
+  gap: 5px; 
+  max-width: 1200px;
+}
+
+.buyer-details input, .vehicle-details input, .sale-details input {
+  width: 100%;
+  max-width: 200px;
+  margin-bottom: 10px; 
+  padding: 8px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+}
+
+h3 {
+  margin-top: 20px; 
+  font-size: 1.5rem;
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}

@@ -1,14 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap');
-
 body {
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-  background-color: #161712;
-  color: #DBD8B3;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Ensures full viewport height */
+  height: 100vh;
 }
 
 .vehicle-container {
@@ -16,7 +10,7 @@ body {
   justify-content: space-between;
   padding: 0 5%;
   width: 100%;
-  max-width: 1200px; /* Optional: restrict maximum width */
+  max-width: 1200px; 
 }
 
 .left-content {
@@ -25,19 +19,6 @@ body {
   padding-left: 50px;
 }
 
-.left-content h2 {
-  font-size: 2.5rem;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 1;
-  margin: 0;
-}
-
-.left-vehicle-content h1 {
-  font-size: 3.5rem;
-  font-family: 'Playfair Display', serif;
-  margin: 0;
-  width: 300px;
-}
 
 .left-vehicle-content h3 {
   font-size: 1.8rem;
