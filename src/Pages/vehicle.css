@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #161712;
+  color: #DBD8B3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensures full viewport height */
+}
+
+.vehicle-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5%;
+  width: 100%;
+  max-width: 1200px; /* Optional: restrict maximum width */
+}
+
+.left-content {
+  width: 45%;
+  text-align: left;
+  padding-left: 50px;
+}
+
+.left-content h2 {
+  font-size: 2.5rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 1;
+  margin: 0;
+}
+
+.left-vehicle-content h1 {
+  font-size: 3.5rem;
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+  width: 300px;
+}
+
+.left-vehicle-content h3 {
+  font-size: 1.8rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 1;
+  margin: 25px 0 15px 0;
+}
+
+.input-form {
+  margin-top: 30px;
+}
+
+.input-form input {
+  width: 50%;
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #d4c4a8;
+  border-radius: 5px;
+  color: #161712;
+  background-color: #DBD8B3;
+}
+
+.input-form button {
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  font-family: 'Playfair Display', serif;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 50%;
+  margin-top: 20px;
+}
+
+.input-form button:hover {
+  background-color: #45a049;
+}
+
+.right-vehicle-content {
+  width: 90%;
+  padding-left: 50px;
+
+}
+
+.right-vehicle-content h3 {
+  font-size: 1.8rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 1;
+  margin-bottom: 25px;
+}
+
+.records-list {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+.record-item {
+  padding: 15px;
+  border-bottom: 1px solid #d4c4a8;
+  margin-bottom: 15px;
+  background-color: #282c34;
+  border-radius: 5px;
+}
+
+.record-item p {
+  margin: 5px 0;
+}
+
+.record-item strong {
+  color: #4CAF50;
+}
+
+.record-item p {
+  color: #DBD8B3;
+}
+
+@media screen and (max-width: 768px) {
+  .vehicle-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .left-vehicle-content, .right-vehicle-content {
+    width: 80%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
