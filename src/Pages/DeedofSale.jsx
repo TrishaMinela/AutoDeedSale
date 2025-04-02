@@ -7,10 +7,13 @@ function DeedofSale() {
   const [buyerAddress, setBuyerAddress] = useState('');
   const [buyerCivilStatus, setBuyerCivilStatus] = useState('');
 
-  const [sellerName, setSellerName] = useState('');
-  const [sellerAddress, setSellerAddress] = useState('');
+  const sellerName = 'Sherwin Sumiran';
+  const sellerAddress = '9172 Purok V Victoria Laguna';
+
   const [salePrice, setSalePrice] = useState('');
-  const [dateOfSale, setDateOfSale] = useState('');
+  
+  const currentDate = new Date().toISOString().split('T')[0];
+  const [dateOfSale, setDateOfSale] = useState(currentDate);
 
   const [makeSeries, setMakeSeries] = useState('');
   const [model, setModel] = useState('');
@@ -83,42 +86,92 @@ function DeedofSale() {
 
   
 
-  const generatePDF = (data) => {
-    //Importing the jsPDF library so we can create PDFs in JS
-    const { jsPDF } = require('jspdf');
-    //Create a new document
-    const doc = new jsPDF();
+    const generatePDF = (data) => {
+  // Importing the jsPDF library so we can create PDFs in JS
+  const { jsPDF } = require('jspdf');
+  // Create a new document
+  const doc = new jsPDF();
 
-    doc.text('Deed of Sale', 10, 10);
-    doc.text(`Buyer Name: ${data.buyerName}`, 10, 20);
-    doc.text(`Buyer Address: ${data.buyerAddress}`, 10, 30);
-    doc.text(`Buyer Civil Status: ${data.buyerCivilStatus}`, 10, 40);
+  // Set font to Times New Roman
+  doc.setFont('times', 'normal');
+  doc.setFontSize(12);
 
-    doc.text(`Seller Name: ${data.sellerName}`, 10, 50);
-    doc.text(`Seller Address: ${data.sellerAddress}`, 10, 60);
-    doc.text(`Sale Price: ${data.salePrice}`, 10, 70);
-    doc.text(`Date of Sale: ${data.dateOfSale}`, 10, 80);
+  // Set margins (padding around content)
+  const margin = 20; // Left and right margin
+  const topMargin = 30; // Top margin for title and first line of text
+  const lineHeight = 6; // Spacing between lines
+  let yPosition = topMargin; // Start after the margin
 
-    doc.text('Motor Vehicle Info:', 10, 90);
-    doc.text(`Make/Series: ${data.makeSeries}`, 10, 100);
-    doc.text(`Model: ${data.model}`, 10, 110);
-    doc.text(`Motor No: ${data.motorNo}`, 10, 120);
-    doc.text(`C.R. No: ${data.crNo}`, 10, 130);
-    doc.text(`Type: ${data.type}`, 10, 140);
-    doc.text(`Plate No.: ${data.plateNo}`, 10, 150);
-    doc.text(`Chassis No: ${data.chassisNo}`, 10, 160);
-    doc.text(`File No: ${data.fileNo}`, 10, 170);
+  // Title (Centered)
+  doc.setFontSize(16);
+  const title = 'Deed of Sale of a Motor Vehicle';
+  const titleWidth = doc.getTextWidth(title);
+  const xTitle = (doc.internal.pageSize.width - titleWidth) / 2;
+  doc.text(title, xTitle, yPosition);
+  yPosition += lineHeight * 2;
 
-    doc.text(`Witness 1: ${data.witness1Name}`, 10, 180);
-    doc.text(`Witness 2: ${data.witness2Name}`, 10, 190);
+  // Content - Main body text (formatted as paragraphs)
+  doc.setFontSize(12);
+  const content = [
+    `I, ${data.sellerName}, of legal age, Filipino citizen, and a resident of ${data.sellerAddress}, Philippines, herein referred to as the VENDOR, for and in consideration of the amount of ${data.salePrice} PESOS, Philippines currency and receipt of which is hereby acknowledged from ${data.buyerName}, of legal age, Filipino citizen, with residence and postal address, ${data.buyerAddress}, Philippines herein referred to as the VENDEE, hereby SELL, TRANSFER and CONVEY, and by these presents have SOLD, TRANSFERRED AND CONVEYED unto said VENDEE that motor vehicle herein described as follows:`,
 
-    // For signatures, we will mention the file names since PDFs can't directly store images in this simple format
-    // doc.text(`Buyer Signature: ${data.buyerSignature ? 'Uploaded' : 'Not Provided'}`, 10, 200);
-    // doc.text(`Seller Signature: ${data.sellerSignature ? 'Uploaded' : 'Not Provided'}`, 10, 210);
+    `Make/Series: ${data.makeSeries}`,
+    `Type: ${data.type}`,
+    `Model: ${data.model}`,
+    `Plate No.: ${data.plateNo}`,
+    `Motor No.: ${data.motorNo}`,
+    `Chassis No.: ${data.chassisNo}`,
+    `C.R. No.: ${data.crNo}`,
+    `File No.: ${data.fileNo}`,
 
-    // Save the PDF
-    doc.save('deed_of_sale.pdf');
-  };
+    `I hereby warrant that the above-described motor vehicle is free from any lien or encumbrance except that which appears in the Certificate of Registration, if any, and that I will defend the title and rights of the VENDEE from any claims of whatever kind or nature from third persons.`,
+
+    `In witness whereof, we have hereunto affixed our signature this ${data.dateOfSale} day of ${data.month} in Laguna, Philippines.`,
+
+    'Signed in the presence of:',
+
+  ];
+
+  // Add content with paragraph-like formatting and text wrapping
+    const lineWidth = doc.internal.pageSize.width - 2 * margin; // Calculating width available for text
+  content.forEach((text, index) => {
+    // First paragraph - custom line height
+    if (index === 0) {
+      doc.text(text, margin, yPosition, { maxWidth: lineWidth });
+      yPosition += lineHeight * 5.5;  // Extra spacing for first paragraph
+    }
+    // 9th, 10th, and 11th paragraphs - custom line height
+    else if (index === 9 || index === 10) {
+      doc.text(text, margin, yPosition, { maxWidth: lineWidth });
+      yPosition += lineHeight * 3;  // Extra spacing for these paragraphs
+    }
+    // Other paragraphs - standard line height
+    else {
+      doc.text(text, margin, yPosition, { maxWidth: lineWidth });
+      yPosition += lineHeight * 1.5;  // Standard spacing for other paragraphs
+    }
+  });
+
+  // Signature lines
+  doc.text('Witness 1: ______________________', margin, yPosition);
+  yPosition += lineHeight;
+  doc.text('Witness 2: ______________________', margin, yPosition);
+
+  yPosition += lineHeight * 3;
+  doc.text('Vendor: ______________________', margin, yPosition);
+  yPosition += lineHeight;
+  doc.text('Vendee: ______________________', margin, yPosition);
+
+  // Save the PDF
+  doc.save('deed_of_sale.pdf');
+};
+
+
+
+
+
+
+
   
   
   const sendEmail = (data) => {
@@ -190,120 +243,116 @@ const handleActionChange = () => {
 
 
 
-  return (
+   return (
     <div className="App">
-      <h1>Deed of Sale</h1>
       <form onSubmit={handleSubmit}>
         {/* Buyer Details */}
         <h3>Buyer Details</h3>
-        <label>Buyer Name:
-          <input type="text" value={buyerName} onChange={(e) => setBuyerName(e.target.value)} />
-        </label><br />
-        <label>Buyer Address:
-          <input type="text" value={buyerAddress} onChange={(e) => setBuyerAddress(e.target.value)} />
-        </label><br />
-        <label>Buyer Civil Status:
-          <input type="text" value={buyerCivilStatus} onChange={(e) => setBuyerCivilStatus(e.target.value)} />
-        </label><br />
+        <input
+          type="text"
+          value={buyerName}
+          onChange={(e) => setBuyerName(e.target.value)}
+          placeholder="Enter Buyer Name"
+        /><br />
+        <input
+          type="text"
+          value={buyerAddress}
+          onChange={(e) => setBuyerAddress(e.target.value)}
+          placeholder="Enter Buyer Address"
+        /><br />
+        <input
+          type="text"
+          value={buyerCivilStatus}
+          onChange={(e) => setBuyerCivilStatus(e.target.value)}
+          placeholder="Enter Buyer Civil Status"
+        /><br />
 
-        {/* Seller Details */}
-        <h3>Seller Details</h3>
-        <label>Seller Name:
-          <input type="text" value={sellerName} onChange={(e) => setSellerName(e.target.value)} />
-        </label><br />
-        <label>Seller Address:
-          <input type="text" value={sellerAddress} onChange={(e) => setSellerAddress(e.target.value)} />
-        </label><br />
-        <label>Sale Price (₱):
-  <input
-    type="number"
-    value={salePrice}
-    onChange={(e) => setSalePrice(e.target.value)}
-    step="0.01"
-    min="0"
-    placeholder="Enter amount in ₱"
-  />
-</label><br />
-
-        <label>Date of Sale:
-          <input type="date" value={dateOfSale} onChange={(e) => setDateOfSale(e.target.value)} />
-        </label><br />
+        <input
+          type="number"
+          value={salePrice}
+          onChange={(e) => setSalePrice(e.target.value)}
+          step="0.01"
+          min="0"
+          placeholder="Enter Sale Price in ₱"
+        /><br />
 
         {/* Vehicle Info */}
-        <h3>Motor Vehicle Info</h3>
-        <label>Make/Series:
-          <input type="text" value={makeSeries} onChange={(e) => setMakeSeries(e.target.value)} />
-        </label><br />
-        <label>Model:
-          <input type="text" value={model} onChange={(e) => setModel(e.target.value)} />
-        </label><br />
-        <label>Motor No:
-          <input type="text" value={motorNo} onChange={(e) => setMotorNo(e.target.value)} />
-        </label><br />
-        <label>C.R. No:
-          <input type="text" value={crNo} onChange={(e) => setCrNo(e.target.value)} />
-        </label><br />
-        <label>Type:
-          <input type="text" value={type} onChange={(e) => setType(e.target.value)} />
-        </label><br />
-        <label>Plate No.:
-          <input type="text" value={plateNo} onChange={(e) => setPlateNo(e.target.value)} />
-        </label><br />
-        <label>Chassis No:
-          <input type="text" value={chassisNo} onChange={(e) => setChassisNo(e.target.value)} />
-        </label><br />
-        <label>File No:
-          <input type="text" value={fileNo} onChange={(e) => setFileNo(e.target.value)} />
-        </label><br />
+        <input
+          type="text"
+          value={makeSeries}
+          onChange={(e) => setMakeSeries(e.target.value)}
+          placeholder="Enter Make/Series"
+        /><br />
+        <input
+          type="text"
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+          placeholder="Enter Model"
+        /><br />
+        <input
+          type="text"
+          value={motorNo}
+          onChange={(e) => setMotorNo(e.target.value)}
+          placeholder="Enter Motor No"
+        /><br />
+        <input
+          type="text"
+          value={crNo}
+          onChange={(e) => setCrNo(e.target.value)}
+          placeholder="Enter C.R. No"
+        /><br />
+        <input
+          type="text"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          placeholder="Enter Type"
+        /><br />
+        <input
+          type="text"
+          value={plateNo}
+          onChange={(e) => setPlateNo(e.target.value)}
+          placeholder="Enter Plate No"
+        /><br />
+        <input
+          type="text"
+          value={chassisNo}
+          onChange={(e) => setChassisNo(e.target.value)}
+          placeholder="Enter Chassis No"
+        /><br />
+        <input
+          type="text"
+          value={fileNo}
+          onChange={(e) => setFileNo(e.target.value)}
+          placeholder="Enter File No"
+        /><br />
 
-        {/* Witnesses */}
+        {/* Witness Details
         <h3>Witnesses</h3>
-        <label>Witness Name:
-          <input type="text" value={witness1Name} onChange={(e) => setWitness1Name(e.target.value)} />
-        </label><br />
-        <label>Witness Name:
-          <input type="text" value={witness2Name} onChange={(e) => setWitness2Name(e.target.value)} />
-        </label><br />
+        <input
+          type="text"
+          value={witness1Name}
+          onChange={(e) => setWitness1Name(e.target.value)}
+          placeholder="Enter Witness 1 Name"
+        /><br />
+        <input
+          type="text"
+          value={witness2Name}
+          onChange={(e) => setWitness2Name(e.target.value)}
+          placeholder="Enter Witness 2 Name"
+        /><br /> */}
 
-        {/* Signatures
-        <h3>Signatures</h3>
-        <label>Upload Buyer Signature:
-          <input type="file" onChange={(e) => setBuyerSignature(e.target.files[0])} />
-        </label><br />
-        <label>Upload Seller Signature:
-          <input type="file" onChange={(e) => setSellerSignature(e.target.files[0])} />
-        </label><br /> */}
+        <h3>Sale Date</h3>
+        <input
+          type="date"
+          value={dateOfSale}
+          onChange={(e) => setDateOfSale(e.target.value)}
+        /><br />
 
-<br/>
-        
-        <div>
-        <button type="submit">Generate Deed of Sale PDF</button>
-        <br/>
-        <button type="button" onClick={() => handleActionChange('send')}>Send via Email</button>
-        </div>
-        
+        {/* Submit Buttons */}
+        <button type="submit">Generate PDF</button>
+        <button type="button" onClick={handleActionChange}>Send via Email</button>
       </form>
-
-      {/* Conditional rendering of the email form */}
-    {authenticated && (
-      <form onSubmit={handleEmailSubmit}>
-        <label>
-          Recipient Email:
-          <input
-            type="email"
-            value={recipientEmail}
-            onChange={(e) => setRecipientEmail(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Send Email</button>
-      </form>
-    )}
-  </div>
-
-    
-
-    
+    </div>
   );
 }
 
