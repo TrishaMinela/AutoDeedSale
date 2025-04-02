@@ -31,6 +31,10 @@ body {
   margin-top: 30px;
 }
 
+.input-form input {
+  background-color: transparent; 
+}
+
 .input-form input, .input-form button {
     box-sizing: border-box;
     display: inline-block;
@@ -40,11 +44,11 @@ body {
     font-size: 1rem;
     border: 1px solid #d4c4a8;
     border-radius: 5px;
-    color: #161712;
-    background-color: #DBD8B3;
+    color: #DBD8B3;
 }
 
 .input-form button {
+  display: block;
     background-color: #819DAD;
     color: white;
     border: none;
@@ -55,7 +59,8 @@ body {
 }
 
 .input-form button:hover {
-  background-color: #45a049;
+  background-color: #CAE781;
+  color: #161712
 }
 
 .right-vehicle-content {
@@ -108,4 +113,23 @@ body {
     padding-left: 0;
     padding-right: 0;
   }
+}
+
+
+
+
+/* Hide the default calendar icon for date input */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;  /* Hide the default calendar icon */
+}
+
+/* Hide the default up/down number input controls */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;  /* Hide the spin buttons */
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;  /* Hide the spin buttons for Firefox */
 }

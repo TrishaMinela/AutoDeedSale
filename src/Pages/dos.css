@@ -11,13 +11,18 @@
 }
 
 .buyer-details input, .vehicle-details input, .sale-details input {
+    background-color: transparent; 
   width: 100%;
   max-width: 200px;
-  margin-bottom: 10px; 
-  padding: 8px;
+  padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #d4c4a8;
+    border-radius: 5px;
+    color: #DBD8B3;
 }
 
 form {
+     
   display: flex;
   flex-direction: column;
   gap: 20px; 
@@ -34,11 +39,40 @@ button {
   color: white;
   border: none;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 1.2rem;
   transition: background-color 0.3s ease;
+  width: 20%;
+  max-width: 200px;
+    border-radius: 5px;
+}
+
+.email {
+    background-color: #DBD8B3;
+    color: #161712;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #CAE781;
+  color: #161712
+}
+
+
+
+
+
+/* Hide the default calendar icon for date input */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;  /* Hide the default calendar icon */
+}
+
+/* Hide the default up/down number input controls */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;  /* Hide the spin buttons */
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;  /* Hide the spin buttons for Firefox */
 }

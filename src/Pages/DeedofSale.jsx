@@ -276,6 +276,7 @@ const handleActionChange = () => {
         
 
         {/* Vehicle Info */}
+        <h3>Vehicle Details</h3>
         <div className="vehicle-details">
             <input
               type="text"
@@ -342,7 +343,7 @@ const handleActionChange = () => {
           onChange={(e) => setWitness2Name(e.target.value)}
           placeholder="Enter Witness 2 Name"
         /><br /> */}
-
+        <h3>Transaction Details</h3>
         <div className = "sale-details">
             <input
             type="number"
@@ -362,7 +363,7 @@ const handleActionChange = () => {
 
         {/* Submit Buttons */}
         <button type="submit">Generate PDF</button>
-        <button type="button" onClick={handleActionChange}>Send via Email</button>
+        <button className="email" type="button" onClick={handleActionChange}>Send via Email</button>
       </form>
     </div>
   );
