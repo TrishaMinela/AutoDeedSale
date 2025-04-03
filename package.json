@@ -21,6 +21,7 @@
     "url": "https://github.com/TrishaMinela/AutoDeedSale/issues"
   },
   "dependencies": {
+    "firebase": "^11.6.0",
     "jspdf": "^3.0.1",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.4.1",

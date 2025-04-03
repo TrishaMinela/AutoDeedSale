@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import DeedofSale from "./Pages/DeedofSale";
 import Vehicles from "./Pages/Vehicles";
 import "./Stylesheets/styles.css";
 import carImage from "./Assets/car.png"; 
 import logo from "./Assets/logo.png";
 
-function HomePage({ user, handleLogin, handleLogout}) {
+
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+
+function HomePage() {
   return (
     <div className="container">
       <div className="left-content">
@@ -28,24 +47,39 @@ function App() {
 
   const [user, setUser] = useState(null);
 
+  // Monitor auth state changes
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }
-  , []);  
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
 
-  const handleLogin = () => {
-    const userData = { name: "Admin", email: "admin@example.com" }; 
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData)); 
-  }
+    return () => unsubscribe();
+  }, []);
 
+  // Google login
+  const handleLogin = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    // The signed-in user info will be available in result.user
+    console.log(result.user);
+    setUser(result.user); 
+  } catch (error) {
+    console.error(error);
+  }
+};
+  // Logout
   const handleLogout = () => {
+  signOut(auth).then(() => {
+    console.log("User logged out");
     setUser(null);
-    localStorage.removeItem("user"); 
-  }
+  }).catch((error) => {
+    console.error(error);
+  });
+};
 
   return (
     <Router>
@@ -56,7 +90,7 @@ function App() {
           <div className="auth-text">
             {user ? (
               <>
-                <span className="welcome-text">Hi, {user.name}</span>
+                <span className="welcome-text">Hi, {user.displayName}</span>
                 <span className="auth-link" onClick={handleLogout}>Logout</span>
               </>
             ) : (
