@@ -52,6 +52,7 @@ function Vehicle() {
             onChange={(e) => setPriceBought(e.target.value)}
             placeholder="Price Bought"
           />
+          <label htmlFor="dateBought">Date Bought</label>
           <input
             type="date"
             value={dateBought}
@@ -63,6 +64,7 @@ function Vehicle() {
             onChange={(e) => setPriceSold(e.target.value)}
             placeholder="Price Sold"
           />
+          <label htmlFor="dateSold">Date Sold</label>
           <input
             type="date"
             value={dateSold}

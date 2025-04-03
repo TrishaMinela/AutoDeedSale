@@ -8,9 +8,14 @@ body {
 }
 
 .header {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 40px);
+  padding: 10px 20px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
 }
 
 .logo-img {
@@ -23,6 +28,27 @@ body {
 .logo-img:hover {
   transform: scale(1.1);
 }
+
+.auth-text {
+  display: flex;
+  gap: 15px;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.auth-link {
+  cursor: pointer;
+  transition: font-size 0.2s ease-in-out;
+}
+
+.auth-link:hover {
+  
+  font-size: 18px;
+  color: #DBD8B3;
+}
+
+
+
 
 .container {
   display: flex;

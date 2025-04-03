@@ -38,8 +38,8 @@ body {
 .input-form input, .input-form button {
     box-sizing: border-box;
     display: inline-block;
-    width: 60%;
-    margin-bottom: 20px;
+    width: 100%;
+    margin-bottom: 15px;
     padding: 10px;
     font-size: 1rem;
     border: 1px solid #d4c4a8;
@@ -47,8 +47,12 @@ body {
     color: #DBD8B3;
 }
 
+label {
+    font-size: 0.8rem;
+}
+
 .input-form button {
-  display: block;
+    display: block;
     background-color: #819DAD;
     color: white;
     border: none;
