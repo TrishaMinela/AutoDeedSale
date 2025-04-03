@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+
 import DeedofSale from "./Pages/DeedofSale";
 import Vehicles from "./Pages/Vehicles";
 import "./Stylesheets/styles.css";
@@ -23,18 +25,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+const db = getFirestore(app);
 
 
-function HomePage() {
+function HomePage({user}) {
   return (
     <div className="container">
       <div className="left-content">
         <h2>Welcome to</h2>
         <h1>WHEELS & DEALS</h1>
-        <div className="buttons">
-          <Link to="/deed-of-sale" className="btn">Deed of Sale</Link>
-          <Link to="/vehicles" className="btn">Vehicles</Link>
-        </div>
+        {user?.isAdmin && (
+          <div className="buttons">
+            <Link to="/deed-of-sale" className="btn">Deed of Sale</Link>
+            <Link to="/vehicles" className="btn">Vehicles</Link>
+          </div>
+        )}
       </div>
       <div className="right-content">
         <img src={carImage} alt="Car" className="car-image" />
@@ -62,15 +67,26 @@ function App() {
 
   // Google login
   const handleLogin = async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    // The signed-in user info will be available in result.user
-    console.log(result.user);
-    setUser(result.user); 
-  } catch (error) {
-    console.error(error);
-  }
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      //User an admin?
+      const adminRef = doc(db, "admins", user.email);
+      const adminSnap = await getDoc(adminRef);
+      if (adminSnap.exists()) {
+        console.log("User is an admin:", user.email);
+        setUser({ ...user, isAdmin: true });
+      } else {
+        console.log("User is not an admin:", user.email);
+        setUser({ ...user, isAdmin: false });
+      }
+    } catch (error) {
+      console.error(error);
+    }
 };
+
+
   // Logout
   const handleLogout = () => {
   signOut(auth).then(() => {
@@ -100,7 +116,7 @@ function App() {
       </header>
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage user={user}/>} />
         <Route path="/deed-of-sale" element={<DeedofSale />} />
         <Route path="/vehicles" element={<Vehicles />} />
       </Routes>
