@@ -9,7 +9,7 @@ import Vehicles from "./Pages/Vehicles";
 import "./Stylesheets/styles.css";
 import carImage from "./Assets/car.png"; 
 import logo from "./Assets/logo.png";
-
+import ProtectedRoute from "./Components/ProtectedRoutes";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -22,10 +22,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-const db = getFirestore(app);
+const app = initializeApp(firebaseConfig); //initialize using config
+const auth = getAuth(app); //firebase authentication
+const provider = new GoogleAuthProvider(); //google provider
+const db = getFirestore(app); //nosql database 
 
 
 function HomePage({user}) {
@@ -48,6 +48,9 @@ function HomePage({user}) {
   );
 }
 
+
+// Main App component
+// This component handles the routing and authentication logic of the application
 function App() {
 
   const [user, setUser] = useState(null);
@@ -68,6 +71,8 @@ function App() {
   // Google login
   const handleLogin = async () => {
     try {
+      //Use firebase authentication to sign in with Google
+      //Returns a promise that resolves with the result of the sign-in operation
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
@@ -117,11 +122,22 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage user={user}/>} />
-        <Route path="/deed-of-sale" element={<DeedofSale />} />
-        <Route path="/vehicles" element={<Vehicles />} />
+        <Route path="/deed-of-sale" element={
+          <ProtectedRoute user ={user} isAdminRequired={true}>
+            <DeedofSale />
+          </ProtectedRoute>
+        } 
+        />
+        <Route path="/vehicles" element={
+          <ProtectedRoute user ={user} isAdminRequired={true}>
+            <Vehicles />
+          </ProtectedRoute>
+        } 
+        />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+export { db };

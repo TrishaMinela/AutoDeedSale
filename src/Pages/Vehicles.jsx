@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import { db } from '../App';
 import './vehicle.css'; 
+
+
 
 function Vehicle() {
   // State to manage the form inputs and the list of vehicle records
@@ -11,18 +15,25 @@ function Vehicle() {
 
   const [vehicleRecords, setVehicleRecords] = useState([]);
 
-  // Handle the insertion of a new vehicle record
-  const handleInsert = () => {
-    const newRecord = {
-      vehicleName,
-      priceBought,
-      dateBought,
-      priceSold,
-      dateSold,
-    };
+  // Fetch existing vehicle records from Firestore when the component mounts
+  const fetchVehicleRecords = async () => {
+    const querySnapshot = await getDocs(collection(db, 'vehicles'));
+    const records = querySnapshot.docs.map((doc) => (doc.data()));
+    setVehicleRecords(records);
+  };
 
-    // Add the new record to the existing list of vehicle records
-    setVehicleRecords([...vehicleRecords, newRecord]);
+  //Handle the insertion of a new vehicle record
+  const handleInsert = async () => {
+    const newRecord = {
+        vehicleName,
+        priceBought: Number(priceBought),
+        dateBought: new Date(dateBought),
+        priceSold: Number(priceSold),
+        dateSold: new Date(dateSold),
+      };
+
+    // Add the new record to Firestore
+    await addDoc(collection(db, 'vehicles'), newRecord);
 
     // Reset form inputs
     setVehicleName('');
@@ -30,7 +41,20 @@ function Vehicle() {
     setDateBought('');
     setPriceSold('');
     setDateSold('');
+
+    // Fetch updated records from Firestore
+    fetchVehicleRecords();
   };
+
+    // Format timestamp to readable date
+  const formatDate = (timestamp) => {
+    return timestamp ? timestamp.toDate().toLocaleDateString() : '';
+  };
+
+    // Fetch vehicle records when the component mounts
+  useEffect(() => {
+    fetchVehicleRecords();
+  }, []);
 
   return (
     <div className="vehicle-container">
@@ -81,7 +105,11 @@ function Vehicle() {
           {vehicleRecords.length > 0 ? (
             vehicleRecords.map((record, index) => (
               <div key={index} className="record-item">
-                <p> <strong>Vehicle Name:</strong> {record.vehicleName} - <strong>Price Bought:</strong> {record.priceBought} - <strong>Date Bought:</strong> {record.dateBought} - <strong>Price Sold:</strong> {record.priceSold} - <strong>Date Sold:</strong> {record.dateSold}</p>
+                  <strong>Vehicle Name:</strong> {record.vehicleName} - 
+                  <strong>Price Bought:</strong> {record.priceBought} - 
+                  <strong>Date Bought:</strong> {formatDate(record.dateBought)} - 
+                  <strong>Price Sold:</strong> {record.priceSold} - 
+                  <strong>Date Sold:</strong> {formatDate(record.dateSold)}
               </div>
             ))
           ) : (
